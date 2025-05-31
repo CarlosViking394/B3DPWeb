@@ -1,0 +1,196 @@
+# Task ID: 7
+# Title: Create Optional Services Component
+# Status: done
+# Dependencies: 1
+# Priority: medium
+# Description: Implement a component for selecting optional services like modelling, support removal, painting, and cleaning with hour inputs.
+# Details:
+1. Create an OptionalServicesPanel component
+2. Implement service categorization (design/finishing/cleaning)
+3. Add visual icons for each service
+4. Implement toggles for each service (modelling, support removal, painting, cleaning)
+5. Add hour input fields with increment/decrement controls
+6. Add quick hour selection buttons
+7. Support fractional hours (e.g., 1.5h)
+8. Calculate additional costs based on selected services and hours
+9. Update the total cost when services are added or removed
+10. Display service summaries
+11. Integrate with formatCost utility
+12. Provide detailed cost breakdowns
+13. Apply professional Brisbane 3D Printing styling
+
+Code example:
+```tsx
+interface Service {
+  id: string;
+  name: string;
+  category: string;
+  icon: string;
+  hourlyRate: number;
+  selected: boolean;
+  hours: number;
+}
+
+const OptionalServicesPanel: React.FC<{
+  onServicesChange: (services: Service[], totalCost: number) => void;
+}> = ({ onServicesChange }) => {
+  const [services, setServices] = useState<Service[]>([
+    { id: 'modelling', name: 'Modelling', category: 'design', icon: 'design-icon', hourlyRate: 70, selected: false, hours: 1 },
+    { id: 'supportRemoval', name: 'Support Removal', category: 'finishing', icon: 'support-icon', hourlyRate: 60, selected: false, hours: 1 },
+    { id: 'painting', name: 'Painting', category: 'finishing', icon: 'paint-icon', hourlyRate: 60, selected: false, hours: 1 },
+    { id: 'cleaning', name: 'Cleaning', category: 'cleaning', icon: 'clean-icon', hourlyRate: 60, selected: false, hours: 1 },
+  ]);
+
+  const toggleService = (serviceId: string) => {
+    const updatedServices = services.map(service => {
+      if (service.id === serviceId) {
+        return { ...service, selected: !service.selected };
+      }
+      return service;
+    });
+    setServices(updatedServices);
+    updateTotalCost(updatedServices);
+  };
+
+  const updateHours = (serviceId: string, hours: number) => {
+    // Ensure hours is not negative and supports fractional values
+    const validHours = Math.max(0, hours);
+    
+    const updatedServices = services.map(service => {
+      if (service.id === serviceId) {
+        return { ...service, hours: validHours };
+      }
+      return service;
+    });
+    setServices(updatedServices);
+    updateTotalCost(updatedServices);
+  };
+  
+  const quickSelectHours = (serviceId: string, hours: number) => {
+    updateHours(serviceId, hours);
+  };
+  
+  const updateTotalCost = (updatedServices: Service[]) => {
+    const totalCost = updatedServices.reduce((sum, service) => {
+      if (service.selected) {
+        return sum + (service.hourlyRate * service.hours);
+      }
+      return sum;
+    }, 0);
+    onServicesChange(updatedServices, totalCost);
+  };
+
+  return (
+    <div className="optional-services-panel">
+      <h3>Optional Services</h3>
+      
+      {['design', 'finishing', 'cleaning'].map(category => (
+        <div key={category} className="service-category">
+          <h4>{category.charAt(0).toUpperCase() + category.slice(1)} Services</h4>
+          {services.filter(service => service.category === category).map(service => (
+            <div key={service.id} className="service-item">
+              <div className="service-toggle">
+                <img src={service.icon} alt={service.name} className="service-icon" />
+                <input
+                  type="checkbox"
+                  checked={service.selected}
+                  onChange={() => toggleService(service.id)}
+                  id={`service-${service.id}`}
+                />
+                <label htmlFor={`service-${service.id}`}>{service.name} (${formatCost(service.hourlyRate)}/hr)</label>
+              </div>
+              
+              {service.selected && (
+                <div className="service-details">
+                  <div className="quick-select-buttons">
+                    {[0.5, 1, 2, 3, 4].map(hours => (
+                      <button 
+                        key={hours} 
+                        onClick={() => quickSelectHours(service.id, hours)}
+                        className={service.hours === hours ? 'active' : ''}
+                      >
+                        {hours}h
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <div className="hours-input">
+                    <button onClick={() => updateHours(service.id, service.hours - 0.5)}>-</button>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.5"
+                      value={service.hours}
+                      onChange={(e) => updateHours(service.id, parseFloat(e.target.value) || 0)}
+                    />
+                    <button onClick={() => updateHours(service.id, service.hours + 0.5)}>+</button>
+                    <span>hours</span>
+                  </div>
+                  
+                  <div className="service-cost-summary">
+                    Cost: {formatCost(service.hourlyRate * service.hours)}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ))}
+      
+      <div className="services-cost-breakdown">
+        <h4>Services Cost Breakdown</h4>
+        {services.filter(s => s.selected).map(service => (
+          <div key={service.id} className="cost-item">
+            <span>{service.name} ({service.hours}h)</span>
+            <span>{formatCost(service.hourlyRate * service.hours)}</span>
+          </div>
+        ))}
+        <div className="total-services-cost">
+          <span>Total Additional Services:</span>
+          <span>{formatCost(services.reduce((sum, s) => s.selected ? sum + (s.hourlyRate * s.hours) : sum, 0))}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+# Test Strategy:
+1. Test toggling services on and off
+2. Test incrementing and decrementing hours
+3. Test entering fractional hours
+4. Test quick hour selection buttons
+5. Verify cost calculations update correctly when services are changed
+6. Verify service categorization displays correctly
+7. Test with various combinations of services
+8. Verify the cost breakdown updates correctly
+9. Verify the UI is responsive and matches the Brisbane 3D Printing design
+10. Test that icons display properly
+11. Verify integration with formatCost utility
+12. Test edge cases like entering invalid values in the hours input
+
+# Subtasks:
+## 7.1. Verify implementation of OptionalServicesPanel component [done]
+### Dependencies: None
+### Description: Confirm that the OptionalServicesPanel component has been successfully implemented with all required features: service categorization (design/finishing/cleaning), visual icons, toggles for services, hour inputs with controls, quick hour selection, fractional hour support, cost calculations, and Brisbane 3D Printing styling.
+### Details:
+
+
+## 7.2. Validate service pricing and calculations [done]
+### Dependencies: None
+### Description: Verify that the hourly rates are correctly set for each service (Modelling, Support Removal, Painting, Cleaning) and that the cost calculations update properly when services are toggled or hours are changed.
+### Details:
+
+
+## 7.3. Test integration with parent components [done]
+### Dependencies: None
+### Description: Ensure the OptionalServicesPanel properly communicates selected services and costs to parent components through the onServicesChange callback.
+### Details:
+
+
+## 7.4. Perform cross-browser testing [done]
+### Dependencies: None
+### Description: Test the OptionalServicesPanel component across different browsers to ensure consistent appearance and functionality.
+### Details:
+
+

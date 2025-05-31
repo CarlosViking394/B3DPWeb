@@ -1,0 +1,59 @@
+# Task ID: 4
+# Title: Build 3D Model Viewer Component
+# Status: done
+# Dependencies: 1, 3
+# Priority: high
+# Description: Create a Three.js-based 3D viewer that allows users to preview and manipulate their uploaded models with orbit and zoom controls.
+# Details:
+1. Create a ModelViewer component using @react-three/fiber and @react-three/drei
+2. Implement camera controls (orbit, pan, zoom)
+3. Add proper lighting setup to showcase the model
+4. Implement model loading from the parsed file
+5. Add a loading indicator while the model is being processed
+6. Implement responsive canvas sizing
+7. Add grid and axis helpers for better spatial understanding
+
+Code example:
+```tsx
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Grid, useGLTF } from '@react-three/drei';
+
+const ModelViewer: React.FC<{
+  modelUrl: string;
+  modelType: 'stl' | '3mf';
+}> = ({ modelUrl, modelType }) => {
+  return (
+    <div className="model-viewer-container" style={{ height: '400px', width: '100%' }}>
+      <Canvas camera={{ position: [100, 100, 100], fov: 50 }}>
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+        <pointLight position={[-10, -10, -10]} />
+        <Grid infiniteGrid cellSize={10} cellThickness={0.5} />
+        <Model url={modelUrl} type={modelType} />
+        <OrbitControls />
+      </Canvas>
+    </div>
+  );
+};
+
+function Model({ url, type }) {
+  // Load the model based on type
+  const model = type === 'stl' 
+    ? useLoader(STLLoader, url)
+    : useLoader(ThreeMFLoader, url);
+    
+  return (
+    <mesh geometry={model}>
+      <meshStandardMaterial color="#1E88E5" roughness={0.5} metalness={0.5} />
+    </mesh>
+  );
+}
+```
+
+# Test Strategy:
+1. Test loading and rendering different STL and 3MF files
+2. Verify orbit, pan, and zoom controls work correctly
+3. Test on different browsers and devices to ensure responsive behavior
+4. Verify lighting properly showcases the model features
+5. Test with complex models to ensure performance
+6. Verify the model is properly centered and scaled in the viewport

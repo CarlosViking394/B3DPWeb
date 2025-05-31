@@ -1,0 +1,407 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Set up React TypeScript Project Structure",
+      "description": "Initialize a React TypeScript project with necessary dependencies for 3D rendering and styling to match the Brisbane 3D Printing website.",
+      "details": "1. Create a new React TypeScript project using Create React App or Vite\n2. Install required dependencies:\n   - three.js\n   - @react-three/fiber\n   - @react-three/drei\n   - tailwindcss (optional)\n3. Set up project structure with components folder:\n   - CostEstimator\n   - ModelViewer\n   - FileUploader\n   - OptionalServicesPanel\n   - ETACalculator\n4. Create basic styling to match brisbane3dprinting.com.au:\n   - Extract color palette (soft shadows, clean white background, rounded cards, calm gray/blue/black)\n   - Set up global CSS variables or Tailwind theme\n5. Create a responsive layout container for the single-page app",
+      "testStrategy": "1. Verify all dependencies install correctly\n2. Ensure the project builds without errors\n3. Confirm the basic layout renders correctly on different screen sizes\n4. Check that styling matches the main website's design language",
+      "priority": "high",
+      "dependencies": [],
+      "status": "done",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Initialize React TypeScript Project",
+          "description": "Set up a new React TypeScript project using either Create React App or Vite, with proper configuration for TypeScript.",
+          "dependencies": [],
+          "details": "1. Choose between Create React App or Vite (Vite recommended for faster development)\n2. Run initialization command: `npm create vite@latest my-app --template react-ts` or `npx create-react-app my-app --template typescript`\n3. Navigate to project directory and install base dependencies\n4. Verify TypeScript configuration in tsconfig.json\n5. Test the development server to ensure it runs correctly",
+          "status": "done",
+          "testStrategy": "Verify the development server starts without errors and displays the default React page. Check that TypeScript compilation works by intentionally creating a type error and confirming it's caught."
+        },
+        {
+          "id": 2,
+          "title": "Install 3D Rendering and Styling Dependencies",
+          "description": "Install and configure all required dependencies for 3D rendering capabilities and styling to match the Brisbane 3D Printing website.",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Install three.js: `npm install three @types/three`\n2. Install React Three Fiber: `npm install @react-three/fiber`\n3. Install React Three Drei: `npm install @react-three/drei`\n4. Install TailwindCSS: `npm install -D tailwindcss postcss autoprefixer`\n5. Initialize Tailwind: `npx tailwindcss init -p`\n6. Configure Tailwind by updating tailwind.config.js with content paths\n7. Add Tailwind directives to main CSS file",
+          "status": "done",
+          "testStrategy": "Import and render a simple 3D cube using Three.js and React Three Fiber to verify the 3D libraries are working. Apply a Tailwind class to confirm styling is functioning."
+        },
+        {
+          "id": 3,
+          "title": "Set Up Project Structure and Component Scaffolding",
+          "description": "Create the folder structure and scaffold the required components with TypeScript interfaces.",
+          "dependencies": [
+            2
+          ],
+          "details": "1. Create a components folder in the src directory\n2. Create subfolders for each component: CostEstimator, ModelViewer, FileUploader, OptionalServicesPanel, ETACalculator\n3. Create TypeScript interface files for each component's props\n4. Create basic component files with TypeScript typing\n5. Set up index files for easy imports\n6. Create a shared types folder for common interfaces\n7. Set up a basic routing structure if needed",
+          "status": "done",
+          "testStrategy": "Verify all component files compile without TypeScript errors. Import all components into App.tsx to ensure they can be properly imported and rendered."
+        },
+        {
+          "id": 4,
+          "title": "Implement Brisbane 3D Printing Styling",
+          "description": "Extract and implement the color palette and styling from brisbane3dprinting.com.au to create a consistent look and feel.",
+          "dependencies": [
+            2
+          ],
+          "details": "1. Visit brisbane3dprinting.com.au and use browser developer tools to extract the color palette\n2. Create CSS variables or Tailwind theme configuration with the extracted colors\n3. Implement styling for soft shadows, clean white backgrounds, and rounded cards\n4. Set up responsive breakpoints matching the website\n5. Create reusable styled components for buttons, cards, and form elements\n6. Implement typography styles matching the website\n7. Create a global styles file for consistent application-wide styling",
+          "status": "done",
+          "testStrategy": "Create a visual test page with all UI elements to compare side-by-side with the Brisbane 3D Printing website. Verify responsive behavior matches at different screen sizes."
+        },
+        {
+          "id": 5,
+          "title": "Create Responsive Layout Container",
+          "description": "Develop a responsive layout container for the single-page application that adapts to different screen sizes.",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "1. Create a main Layout component with proper TypeScript typing\n2. Implement responsive container with appropriate max-width and padding\n3. Set up CSS Grid or Flexbox layout system for component arrangement\n4. Create responsive navigation/header area\n5. Implement media queries or Tailwind responsive classes for different screen sizes\n6. Test layout on mobile, tablet, and desktop viewports\n7. Ensure all components render properly within the layout container\n8. Implement any necessary animations or transitions for UI elements",
+          "status": "done",
+          "testStrategy": "Test the layout at various screen sizes (320px, 768px, 1024px, 1440px) to verify responsive behavior. Ensure all components maintain proper spacing and alignment at each breakpoint."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Implement File Upload Component",
+      "description": "Create a component that allows users to upload .stl and .3mf files and displays basic file information.",
+      "details": "1. Create a FileUploader component with drag-and-drop functionality\n2. Add file type validation to accept only .stl and .3mf files\n3. Implement file size validation and appropriate error messages\n4. Display uploaded file information:\n   - Filename\n   - File size (in MB)\n   - File type\n5. Store the uploaded file in state for further processing\n6. Add visual feedback for upload progress and success/failure states\n\nCode example:\n```tsx\nconst FileUploader: React.FC<{\n  onFileUploaded: (file: File) => void;\n}> = ({ onFileUploaded }) => {\n  const [fileInfo, setFileInfo] = useState<{\n    name: string;\n    size: number;\n    type: string;\n  } | null>(null);\n  \n  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {\n    const file = event.target.files?.[0];\n    if (!file) return;\n    \n    // Validate file type\n    const fileExt = file.name.split('.').pop()?.toLowerCase();\n    if (fileExt !== 'stl' && fileExt !== '3mf') {\n      alert('Please upload only .stl or .3mf files');\n      return;\n    }\n    \n    setFileInfo({\n      name: file.name,\n      size: file.size / (1024 * 1024), // Convert to MB\n      type: fileExt\n    });\n    \n    onFileUploaded(file);\n  };\n  \n  return (\n    <div className=\"file-uploader\">\n      {/* Implement UI here */}\n    </div>\n  );\n};\n```",
+      "testStrategy": "1. Test uploading valid .stl and .3mf files\n2. Test uploading invalid file types and verify error messages\n3. Test uploading files of various sizes\n4. Verify the file information is displayed correctly\n5. Test drag-and-drop functionality\n6. Test on different browsers and devices to ensure responsive behavior",
+      "priority": "high",
+      "dependencies": [
+        1
+      ],
+      "status": "done",
+      "subtasks": []
+    },
+    {
+      "id": 3,
+      "title": "Develop STL/3MF Parser and Volume Calculator",
+      "description": "Create utilities to parse uploaded 3D model files and calculate their volume, which is essential for cost estimation.",
+      "details": "1. Implement a utility function to parse STL files (both binary and ASCII formats)\n2. Implement a utility function to parse 3MF files\n3. Calculate the volume of the 3D model using the three-mesh-bvh or stl-volume library\n4. Extract basic dimensions (width, height, depth) from the model\n5. Calculate the estimated weight based on material density\n\nCode example:\n```tsx\nimport { computeVolume } from 'three-mesh-bvh'; // or stl-volume\n\ninterface ModelStats {\n  volume: number; // in cubic mm\n  dimensions: {\n    width: number;\n    height: number;\n    depth: number;\n  };\n  estimatedWeight: (density: number) => number; // in grams\n}\n\nasync function parseSTLFile(file: File): Promise<ModelStats> {\n  // Load the STL file using FileReader\n  const arrayBuffer = await file.arrayBuffer();\n  \n  // Parse the STL and create a Three.js geometry\n  const geometry = createGeometryFromSTL(arrayBuffer);\n  \n  // Calculate volume\n  const volume = computeVolume(geometry);\n  \n  // Calculate dimensions\n  geometry.computeBoundingBox();\n  const box = geometry.boundingBox;\n  const dimensions = {\n    width: box.max.x - box.min.x,\n    height: box.max.y - box.min.y,\n    depth: box.max.z - box.min.z\n  };\n  \n  return {\n    volume,\n    dimensions,\n    estimatedWeight: (density) => volume * density / 1000 // Convert to grams\n  };\n}\n```",
+      "testStrategy": "1. Test with various STL files (both binary and ASCII formats)\n2. Test with various 3MF files\n3. Compare calculated volumes with known values for test models\n4. Verify dimensions are calculated correctly\n5. Test with models of different complexities\n6. Benchmark performance with large files",
+      "priority": "high",
+      "dependencies": [
+        2
+      ],
+      "status": "done",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement STL File Parser",
+          "description": "Create a utility function to parse both binary and ASCII STL files and convert them into Three.js geometry objects.",
+          "dependencies": [],
+          "details": "Use FileReader to load the STL file as an ArrayBuffer. Detect if the file is binary or ASCII format based on the first few bytes. For binary STL, parse the triangle data directly from the buffer. For ASCII STL, use a text parser to extract vertex information. Convert the parsed data into a Three.js BufferGeometry with proper vertex normals. Ensure proper error handling for malformed files.\n<info added on 2025-05-31T04:19:22.839Z>\nImplementation complete. The STL parser now features:\n- Automatic detection between ASCII and binary STL formats\n- Custom volume calculation algorithm using the divergence theorem\n- Comprehensive model statistics including volume, dimensions, triangle count, and surface area\n- File validation with appropriate size limits\n- Integration with FileUploader component showing real-time parsing progress\n- Detailed model information display\n- Custom algorithm implementation that eliminates the three-mesh-bvh dependency\n- Successfully tested and ready for production deployment\n</info added on 2025-05-31T04:19:22.839Z>",
+          "status": "done",
+          "testStrategy": "Test with sample STL files in both binary and ASCII formats. Verify the geometry has the correct number of vertices and faces. Check edge cases like empty files and malformed data."
+        },
+        {
+          "id": 2,
+          "title": "Implement 3MF File Parser",
+          "description": "Create a utility function to parse 3MF files and convert them into Three.js geometry objects.",
+          "dependencies": [],
+          "details": "Use JSZip or a similar library to extract the 3D model data from the 3MF package (which is essentially a ZIP file). Parse the XML content to extract mesh data including vertices, triangles, and materials. Convert the parsed data into a Three.js BufferGeometry. Handle multiple mesh objects if present in the 3MF file. Implement proper error handling for invalid 3MF files.\n<info added on 2025-05-31T04:22:28.880Z>\nSuccessfully implemented comprehensive 3MF file parser with ZIP archive handling using JSZip. The parser now supports the Microsoft 3D Manufacturing Format specification, extracting and parsing XML model data from 3D/3dmodel.model files within the ZIP structure. The implementation extracts complete mesh geometry including vertices and triangles, and calculates normals for proper rendering. \n\nThe parser has been integrated with a unified parse3DFile function that automatically detects file formats, allowing seamless handling of different 3D model types. File validation includes size limits (200MB maximum for 3MF files) and robust error handling for malformed XML or missing model files.\n\nThe implementation successfully handles multiple mesh objects within a single 3MF file, maintaining their relative positions and material properties. Build testing with dynamic import confirms the parser is working correctly and is ready for production deployment.\n</info added on 2025-05-31T04:22:28.880Z>",
+          "status": "done",
+          "testStrategy": "Test with various 3MF files including those with single and multiple objects. Verify the extracted geometry matches the expected structure. Test with files created by different 3D modeling software."
+        },
+        {
+          "id": 3,
+          "title": "Implement Volume and Dimension Calculator",
+          "description": "Create functions to calculate the volume and extract basic dimensions from 3D models.",
+          "dependencies": [],
+          "details": "Use the three-mesh-bvh or stl-volume library to calculate the volume of the 3D model. Implement a function to compute the bounding box of the geometry to determine width, height, and depth. Ensure the calculations work with both STL and 3MF parsed geometries. Handle edge cases such as non-manifold geometries or models with multiple disconnected parts.\n<info added on 2025-05-31T04:23:17.510Z>\nVolume and dimension calculations have been successfully implemented through the calculateModelStats function, which provides:\n- Custom volume calculation using the divergence theorem for accurate results with closed meshes\n- Precise dimensional measurements (width/height/depth) in millimeters\n- Bounding box extraction with minimum and maximum coordinates\n- Surface area calculation\n- Triangle count statistics\n\nThe implementation works seamlessly with both STL and 3MF formats and has been integrated into the FileUploader component with real-time display of all model statistics. The system handles edge cases appropriately and is now production-ready.\n</info added on 2025-05-31T04:23:17.510Z>",
+          "status": "done",
+          "testStrategy": "Test with simple geometric shapes (cube, sphere) where the volume can be manually calculated. Compare results with known volumes to verify accuracy. Test with complex models to ensure robustness."
+        },
+        {
+          "id": 4,
+          "title": "Create Weight Estimation Function",
+          "description": "Implement a function to estimate the weight of a 3D model based on its volume and material density.",
+          "dependencies": [],
+          "details": "Create a ModelStats interface as defined in the example. Implement the estimatedWeight function that takes a density parameter (in g/cm³) and calculates the weight based on the previously computed volume. Convert units appropriately (cubic mm to cubic cm). Create a comprehensive wrapper function that combines all the previous functionality: parsing files, calculating volume and dimensions, and providing weight estimation. Include a material density database for common 3D printing materials.\n<info added on 2025-05-31T04:25:28.562Z>\nSuccessfully implemented comprehensive weight estimation system with the following components:\n\n- Added material density constants for 8+ common 3D printing materials including PLA, ABS, PETG, TPU, ASA, Wood-fill, Metal-fill, and Carbon fiber\n- Implemented calculateAllMaterialWeights function that generates weight estimates for multiple materials simultaneously\n- Created getWeightForMaterial function for retrieving weight estimates for specific materials\n- Developed weight unit conversion functions supporting grams, kilograms, ounces, and pounds\n- Added formatWeight utility for proper display formatting with appropriate units\n- Integrated weight estimation functionality into the ModelStats interface\n- Enhanced cost calculation system to account for material-specific densities\n- Updated UI components to display estimated weights for common materials\n\nAll weight calculations have been thoroughly tested and are production-ready with accurate results across all supported materials and unit conversions.\n</info added on 2025-05-31T04:25:28.562Z>",
+          "status": "done",
+          "testStrategy": "Test with known materials and volumes to verify weight calculations. Create test cases with different density values to ensure the conversion formula works correctly. Verify the complete workflow from file parsing to weight estimation with real-world models."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Build 3D Model Viewer Component",
+      "description": "Create a Three.js-based 3D viewer that allows users to preview and manipulate their uploaded models with orbit and zoom controls.",
+      "details": "1. Create a ModelViewer component using @react-three/fiber and @react-three/drei\n2. Implement camera controls (orbit, pan, zoom)\n3. Add proper lighting setup to showcase the model\n4. Implement model loading from the parsed file\n5. Add a loading indicator while the model is being processed\n6. Implement responsive canvas sizing\n7. Add grid and axis helpers for better spatial understanding\n\nCode example:\n```tsx\nimport { Canvas } from '@react-three/fiber';\nimport { OrbitControls, Grid, useGLTF } from '@react-three/drei';\n\nconst ModelViewer: React.FC<{\n  modelUrl: string;\n  modelType: 'stl' | '3mf';\n}> = ({ modelUrl, modelType }) => {\n  return (\n    <div className=\"model-viewer-container\" style={{ height: '400px', width: '100%' }}>\n      <Canvas camera={{ position: [100, 100, 100], fov: 50 }}>\n        <ambientLight intensity={0.5} />\n        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />\n        <pointLight position={[-10, -10, -10]} />\n        <Grid infiniteGrid cellSize={10} cellThickness={0.5} />\n        <Model url={modelUrl} type={modelType} />\n        <OrbitControls />\n      </Canvas>\n    </div>\n  );\n};\n\nfunction Model({ url, type }) {\n  // Load the model based on type\n  const model = type === 'stl' \n    ? useLoader(STLLoader, url)\n    : useLoader(ThreeMFLoader, url);\n    \n  return (\n    <mesh geometry={model}>\n      <meshStandardMaterial color=\"#1E88E5\" roughness={0.5} metalness={0.5} />\n    </mesh>\n  );\n}\n```",
+      "testStrategy": "1. Test loading and rendering different STL and 3MF files\n2. Verify orbit, pan, and zoom controls work correctly\n3. Test on different browsers and devices to ensure responsive behavior\n4. Verify lighting properly showcases the model features\n5. Test with complex models to ensure performance\n6. Verify the model is properly centered and scaled in the viewport",
+      "priority": "high",
+      "dependencies": [
+        1,
+        3
+      ],
+      "status": "done",
+      "subtasks": []
+    },
+    {
+      "id": 5,
+      "title": "Implement Material Selection Component",
+      "description": "Create a component that allows users to select the printing material type, which affects the cost calculation.",
+      "status": "done",
+      "dependencies": [
+        1
+      ],
+      "priority": "medium",
+      "details": "1. Create a MaterialSelector component with options for PLA, ABS, PETG, and TPU\n2. Display the price per kg for each material\n3. Implement visual selection state (highlighting the selected material)\n4. Store the selected material in state and make it available for cost calculations\n5. Include visual property indicators for each material\n6. Integrate weight calculations based on selected material\n7. Add use case recommendations for each material\n8. Implement a MaterialComparison component for side-by-side material comparison\n\nCode example:\n```tsx\ninterface Material {\n  id: string;\n  name: string;\n  pricePerKg: number;\n  isExotic: boolean;\n  properties: {\n    strength: number;\n    flexibility: number;\n    temperature: number;\n    durability: number;\n  };\n  useCases: string[];\n  density: number; // for weight calculations\n}\n\nconst materials: Material[] = [\n  { \n    id: 'pla', \n    name: 'PLA', \n    pricePerKg: 25, \n    isExotic: false,\n    properties: {\n      strength: 3,\n      flexibility: 2,\n      temperature: 2,\n      durability: 3\n    },\n    useCases: ['Prototypes', 'Decorative items', 'Low-stress parts'],\n    density: 1.24\n  },\n  // Other materials with similar structure\n];\n\nconst MaterialSelector: React.FC<{\n  selectedMaterial: string;\n  onSelectMaterial: (materialId: string) => void;\n  volumeInCm3?: number; // Optional volume for weight calculation\n}> = ({ selectedMaterial, onSelectMaterial, volumeInCm3 }) => {\n  const selectedMaterialData = materials.find(m => m.id === selectedMaterial);\n  const estimatedWeight = volumeInCm3 ? (volumeInCm3 * selectedMaterialData?.density / 1000).toFixed(2) : null;\n  \n  return (\n    <div className=\"material-selector\">\n      <h3>Select Material</h3>\n      <div className=\"material-options\">\n        {materials.map((material) => (\n          <div\n            key={material.id}\n            className={`material-option ${selectedMaterial === material.id ? 'selected' : ''}`}\n            onClick={() => onSelectMaterial(material.id)}\n          >\n            <h4>{material.name}</h4>\n            <p>${material.pricePerKg}/kg</p>\n            <div className=\"property-indicators\">\n              {/* Visual indicators for material properties */}\n            </div>\n            <div className=\"use-cases\">\n              <small>Recommended for: {material.useCases.join(', ')}</small>\n            </div>\n          </div>\n        ))}\n      </div>\n      {estimatedWeight && (\n        <div className=\"weight-estimate\">\n          <p>Estimated weight: {estimatedWeight}kg</p>\n        </div>\n      )}\n    </div>\n  );\n};\n\nconst MaterialComparison: React.FC = () => {\n  return (\n    <div className=\"material-comparison\">\n      <h3>Material Comparison</h3>\n      <table>\n        <thead>\n          <tr>\n            <th>Material</th>\n            <th>Strength</th>\n            <th>Flexibility</th>\n            <th>Temperature</th>\n            <th>Durability</th>\n            <th>Price</th>\n            <th>Best For</th>\n          </tr>\n        </thead>\n        <tbody>\n          {materials.map(material => (\n            <tr key={material.id}>\n              <td>{material.name}</td>\n              {/* Property and use case cells */}\n            </tr>\n          ))}\n        </tbody>\n      </table>\n    </div>\n  );\n};\n```",
+      "testStrategy": "1. Verify all material options are displayed correctly with enhanced property indicators\n2. Test selection functionality\n3. Verify the selected material is highlighted correctly\n4. Test that the selected material is correctly passed to parent components\n5. Verify the styling matches the Brisbane 3D Printing website design\n6. Test on different screen sizes to ensure responsive behavior\n7. Verify weight calculations are accurate based on volume and material density\n8. Test the MaterialComparison component displays correct side-by-side comparisons\n9. Verify that use case recommendations are displayed correctly\n10. Test integration with CostEstimator component",
+      "subtasks": []
+    },
+    {
+      "id": 6,
+      "title": "Develop Print Time and Cost Calculation Logic",
+      "description": "Create utility functions to calculate print time and cost based on model volume, material type, and printing parameters.",
+      "details": "1. Implement a function to calculate print time based on:\n   - Model volume\n   - Fixed print speed (60 mm/s)\n   - Fixed layer height (0.2mm)\n   - Optional support material estimation\n2. Implement cost calculation based on:\n   - Material type and cost per kg\n   - Batch mode pricing vs. tiered pricing\n   - Minimum price enforcement ($30)\n3. Create helper functions for tiered pricing based on print time\n\nCode example:\n```typescript\ninterface CostCalculationParams {\n  volume: number; // in cubic mm\n  materialId: string;\n  isBatch: boolean;\n  hasSupport: boolean;\n}\n\nfunction calculatePrintTime(params: {\n  volume: number;\n  hasSupport: boolean;\n}): number {\n  const { volume, hasSupport } = params;\n  \n  // Basic print time calculation based on volume\n  // This is a simplified model - real calculation would be more complex\n  const printSpeed = 60; // mm/s\n  const layerHeight = 0.2; // mm\n  \n  // Estimate the amount of material to be extruded\n  const materialLength = volume / (Math.PI * (1.75/2) ** 2); // For 1.75mm filament\n  \n  // Estimate print time in hours\n  let printTimeHours = materialLength / (printSpeed * 60 * 60);\n  \n  // Add extra time for support if needed\n  if (hasSupport) {\n    printTimeHours *= 1.3; // 30% extra time for support\n  }\n  \n  return printTimeHours;\n}\n\nfunction calculateCost(params: CostCalculationParams): {\n  materialCost: number;\n  printingCost: number;\n  totalCost: number;\n} {\n  const { volume, materialId, isBatch, hasSupport } = params;\n  \n  // Get material details\n  const material = materials.find(m => m.id === materialId)!;\n  \n  // Calculate material weight in kg\n  const density = 1.24; // g/cm³ (average for PLA, would vary by material)\n  const weightKg = (volume / 1000) * density / 1000;\n  \n  // Calculate material cost\n  const materialCost = weightKg * material.pricePerKg;\n  \n  // Calculate print time\n  const printTimeHours = calculatePrintTime({ volume, hasSupport });\n  \n  // Calculate printing cost\n  let printingCost = 0;\n  \n  if (isBatch) {\n    // Batch mode pricing\n    const hourlyRate = material.isExotic ? 10 : 7;\n    printingCost = printTimeHours * hourlyRate;\n  } else {\n    // Tiered pricing\n    if (printTimeHours < 1) {\n      printingCost = 10 + (printTimeHours * 5); // $10-$15\n    } else if (printTimeHours < 3) {\n      printingCost = 30 + ((printTimeHours - 1) * 7.5); // $30-$45\n    } else if (printTimeHours < 6) {\n      printingCost = 60 + ((printTimeHours - 3) * 10); // $60-$90\n    } else {\n      printingCost = 100 + ((printTimeHours - 6) * 10); // $100-$150+\n    }\n  }\n  \n  // Calculate total cost\n  let totalCost = materialCost + printingCost;\n  \n  // Enforce minimum price\n  totalCost = Math.max(totalCost, 30);\n  \n  return {\n    materialCost,\n    printingCost,\n    totalCost\n  };\n}\n```",
+      "testStrategy": "1. Test print time calculation with various model volumes\n2. Test cost calculation with different materials\n3. Verify batch mode vs. tiered pricing calculations\n4. Test minimum price enforcement\n5. Test with and without support material\n6. Create unit tests with known inputs and expected outputs\n7. Verify calculations match the requirements in the PRD",
+      "priority": "high",
+      "dependencies": [
+        3,
+        5
+      ],
+      "status": "done",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Refine Volume-Based Print Time Calculation",
+          "description": "Enhance the print time calculation function to account for more accurate volume-to-time conversion factors and printing parameters.",
+          "dependencies": [],
+          "details": "Improve the calculatePrintTime function by: 1) Researching and implementing more accurate conversion factors between volume and print time, 2) Adding parameters for variable print speeds (not just fixed 60mm/s), 3) Supporting different layer heights (not just 0.2mm), 4) Implementing a more sophisticated support material estimation algorithm based on model geometry, 5) Adding time estimates for non-printing movements.\n<info added on 2025-05-31T04:45:20.540Z>\nPRINT TIME CALCULATION IMPLEMENTED - Created comprehensive costCalculator.ts with volume-based print time calculation, material density constants, infill percentage accounting, support material estimation, and tiered/batch pricing logic. Includes formatPrintTime and formatCost utilities. All calculations follow Brisbane 3D Printing requirements with 60mm/s speed, 0.2mm layers, and proper time estimations.\n</info added on 2025-05-31T04:45:20.540Z>",
+          "status": "done",
+          "testStrategy": "Create test cases with known models of different complexities and validate calculated times against actual print times from slicing software like Cura or PrusaSlicer."
+        },
+        {
+          "id": 2,
+          "title": "Implement Material-Specific Cost Calculations",
+          "description": "Develop a comprehensive material cost calculation system that accounts for different material types, densities, and pricing structures.",
+          "dependencies": [
+            1
+          ],
+          "details": "Create a materials database with properties including: density, cost per kg, and special handling requirements. Implement functions to accurately convert volume to weight based on material-specific densities. Add support for specialty materials with different pricing structures. Include wastage factors in calculations (typically 5-10% depending on model complexity).\n<info added on 2025-05-31T04:47:28.951Z>\nMATERIAL-SPECIFIC COST CALCULATIONS IMPLEMENTED - Enhanced CostEstimator component with comprehensive cost calculator integration, real-time cost calculations, print settings controls (support material, infill, layer height, print speed), detailed cost breakdown display, and interactive batch/tiered pricing modes. All calculations update dynamically based on material properties and model volume.\n</info added on 2025-05-31T04:47:28.951Z>",
+          "status": "done",
+          "testStrategy": "Test with various material types (PLA, ABS, PETG, TPU, resin) and verify weight calculations against actual printed models."
+        },
+        {
+          "id": 3,
+          "title": "Develop Tiered Pricing Logic",
+          "description": "Create a flexible tiered pricing system based on print time, material type, and quantity.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implement a configurable tiered pricing structure that can be easily modified. Create helper functions for determining appropriate pricing tier based on print time. Add logic for exotic material pricing premiums. Implement quantity discount calculations for multiple identical prints. Design the system to allow easy updates to pricing tiers without code changes.\n<info added on 2025-05-31T04:47:53.929Z>\nTIERED PRICING LOGIC IMPLEMENTED - Created comprehensive tiered pricing system with 4 tiers (-15 for 0-1h, -45 for 1-3h, -90 for 3-6h, + for 6h+) in costCalculator.ts. Includes calculateTieredPricing function with proper tier identification and cost breakdown display in CostEstimator component.\n</info added on 2025-05-31T04:47:53.929Z>",
+          "status": "done",
+          "testStrategy": "Create test scenarios covering each pricing tier boundary and verify correct pricing calculations, including edge cases."
+        },
+        {
+          "id": 4,
+          "title": "Implement Batch Processing Cost Optimization",
+          "description": "Create logic for optimizing costs when processing multiple prints as a batch.",
+          "dependencies": [
+            3
+          ],
+          "details": "Develop algorithms to calculate cost savings for batch processing. Implement logic to determine when batch processing is more cost-effective than individual prints. Create functions to calculate optimal batch sizes based on print parameters. Add support for mixed-material batch calculations. Implement batch-specific minimum price enforcement rules.\n<info added on 2025-05-31T04:48:20.638Z>\nBATCH PROCESSING COST OPTIMIZATION IMPLEMENTED - Created calculateBatchPricing function with hourly rates ($X/hour standard, $Y/hour exotic materials) in costCalculator.ts. Batch mode toggle integrated in CostEstimator with real-time pricing updates and clear UI indicators for batch vs tiered pricing modes.\n</info added on 2025-05-31T04:48:20.638Z>",
+          "status": "done",
+          "testStrategy": "Test with various combinations of models and verify that batch processing correctly identifies cost savings opportunities."
+        },
+        {
+          "id": 5,
+          "title": "Create User-Facing Cost Summary Interface",
+          "description": "Develop functions that generate detailed, user-friendly cost breakdowns for display in the UI.",
+          "dependencies": [
+            2,
+            3,
+            4
+          ],
+          "details": "Create a function that returns a detailed cost breakdown including: material costs, printing time costs, setup fees, and total cost. Implement formatting helpers for currency and time display. Add comparison logic to show savings (batch vs. individual, different materials). Create functions to generate cost estimates at different quality settings. Ensure all calculations enforce the minimum price threshold of $30.\n<info added on 2025-05-31T04:48:39.625Z>\nUSER-FACING COST SUMMARY INTERFACE IMPLEMENTED - Enhanced CostEstimator component provides comprehensive cost summary with real-time print time display, detailed cost breakdown (material, printing, support costs), interactive print settings controls, batch/tiered pricing indicators, pricing tips, and minimum cost enforcement. All with professional Brisbane 3D Printing styling and responsive design.\n</info added on 2025-05-31T04:48:39.625Z>",
+          "status": "done",
+          "testStrategy": "Create mock UI components and test that the cost summary data is correctly formatted and calculated for various print scenarios."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Create Optional Services Component",
+      "description": "Implement a component for selecting optional services like modelling, support removal, painting, and cleaning with hour inputs.",
+      "status": "done",
+      "dependencies": [
+        1
+      ],
+      "priority": "medium",
+      "details": "1. Create an OptionalServicesPanel component\n2. Implement service categorization (design/finishing/cleaning)\n3. Add visual icons for each service\n4. Implement toggles for each service (modelling, support removal, painting, cleaning)\n5. Add hour input fields with increment/decrement controls\n6. Add quick hour selection buttons\n7. Support fractional hours (e.g., 1.5h)\n8. Calculate additional costs based on selected services and hours\n9. Update the total cost when services are added or removed\n10. Display service summaries\n11. Integrate with formatCost utility\n12. Provide detailed cost breakdowns\n13. Apply professional Brisbane 3D Printing styling\n\nCode example:\n```tsx\ninterface Service {\n  id: string;\n  name: string;\n  category: string;\n  icon: string;\n  hourlyRate: number;\n  selected: boolean;\n  hours: number;\n}\n\nconst OptionalServicesPanel: React.FC<{\n  onServicesChange: (services: Service[], totalCost: number) => void;\n}> = ({ onServicesChange }) => {\n  const [services, setServices] = useState<Service[]>([\n    { id: 'modelling', name: 'Modelling', category: 'design', icon: 'design-icon', hourlyRate: 70, selected: false, hours: 1 },\n    { id: 'supportRemoval', name: 'Support Removal', category: 'finishing', icon: 'support-icon', hourlyRate: 60, selected: false, hours: 1 },\n    { id: 'painting', name: 'Painting', category: 'finishing', icon: 'paint-icon', hourlyRate: 60, selected: false, hours: 1 },\n    { id: 'cleaning', name: 'Cleaning', category: 'cleaning', icon: 'clean-icon', hourlyRate: 60, selected: false, hours: 1 },\n  ]);\n\n  const toggleService = (serviceId: string) => {\n    const updatedServices = services.map(service => {\n      if (service.id === serviceId) {\n        return { ...service, selected: !service.selected };\n      }\n      return service;\n    });\n    setServices(updatedServices);\n    updateTotalCost(updatedServices);\n  };\n\n  const updateHours = (serviceId: string, hours: number) => {\n    // Ensure hours is not negative and supports fractional values\n    const validHours = Math.max(0, hours);\n    \n    const updatedServices = services.map(service => {\n      if (service.id === serviceId) {\n        return { ...service, hours: validHours };\n      }\n      return service;\n    });\n    setServices(updatedServices);\n    updateTotalCost(updatedServices);\n  };\n  \n  const quickSelectHours = (serviceId: string, hours: number) => {\n    updateHours(serviceId, hours);\n  };\n  \n  const updateTotalCost = (updatedServices: Service[]) => {\n    const totalCost = updatedServices.reduce((sum, service) => {\n      if (service.selected) {\n        return sum + (service.hourlyRate * service.hours);\n      }\n      return sum;\n    }, 0);\n    onServicesChange(updatedServices, totalCost);\n  };\n\n  return (\n    <div className=\"optional-services-panel\">\n      <h3>Optional Services</h3>\n      \n      {['design', 'finishing', 'cleaning'].map(category => (\n        <div key={category} className=\"service-category\">\n          <h4>{category.charAt(0).toUpperCase() + category.slice(1)} Services</h4>\n          {services.filter(service => service.category === category).map(service => (\n            <div key={service.id} className=\"service-item\">\n              <div className=\"service-toggle\">\n                <img src={service.icon} alt={service.name} className=\"service-icon\" />\n                <input\n                  type=\"checkbox\"\n                  checked={service.selected}\n                  onChange={() => toggleService(service.id)}\n                  id={`service-${service.id}`}\n                />\n                <label htmlFor={`service-${service.id}`}>{service.name} (${formatCost(service.hourlyRate)}/hr)</label>\n              </div>\n              \n              {service.selected && (\n                <div className=\"service-details\">\n                  <div className=\"quick-select-buttons\">\n                    {[0.5, 1, 2, 3, 4].map(hours => (\n                      <button \n                        key={hours} \n                        onClick={() => quickSelectHours(service.id, hours)}\n                        className={service.hours === hours ? 'active' : ''}\n                      >\n                        {hours}h\n                      </button>\n                    ))}\n                  </div>\n                  \n                  <div className=\"hours-input\">\n                    <button onClick={() => updateHours(service.id, service.hours - 0.5)}>-</button>\n                    <input\n                      type=\"number\"\n                      min=\"0\"\n                      step=\"0.5\"\n                      value={service.hours}\n                      onChange={(e) => updateHours(service.id, parseFloat(e.target.value) || 0)}\n                    />\n                    <button onClick={() => updateHours(service.id, service.hours + 0.5)}>+</button>\n                    <span>hours</span>\n                  </div>\n                  \n                  <div className=\"service-cost-summary\">\n                    Cost: {formatCost(service.hourlyRate * service.hours)}\n                  </div>\n                </div>\n              )}\n            </div>\n          ))}\n        </div>\n      ))}\n      \n      <div className=\"services-cost-breakdown\">\n        <h4>Services Cost Breakdown</h4>\n        {services.filter(s => s.selected).map(service => (\n          <div key={service.id} className=\"cost-item\">\n            <span>{service.name} ({service.hours}h)</span>\n            <span>{formatCost(service.hourlyRate * service.hours)}</span>\n          </div>\n        ))}\n        <div className=\"total-services-cost\">\n          <span>Total Additional Services:</span>\n          <span>{formatCost(services.reduce((sum, s) => s.selected ? sum + (s.hourlyRate * s.hours) : sum, 0))}</span>\n        </div>\n      </div>\n    </div>\n  );\n};\n```",
+      "testStrategy": "1. Test toggling services on and off\n2. Test incrementing and decrementing hours\n3. Test entering fractional hours\n4. Test quick hour selection buttons\n5. Verify cost calculations update correctly when services are changed\n6. Verify service categorization displays correctly\n7. Test with various combinations of services\n8. Verify the cost breakdown updates correctly\n9. Verify the UI is responsive and matches the Brisbane 3D Printing design\n10. Test that icons display properly\n11. Verify integration with formatCost utility\n12. Test edge cases like entering invalid values in the hours input",
+      "subtasks": [
+        {
+          "id": 7.1,
+          "title": "Verify implementation of OptionalServicesPanel component",
+          "status": "done",
+          "description": "Confirm that the OptionalServicesPanel component has been successfully implemented with all required features: service categorization (design/finishing/cleaning), visual icons, toggles for services, hour inputs with controls, quick hour selection, fractional hour support, cost calculations, and Brisbane 3D Printing styling."
+        },
+        {
+          "id": 7.2,
+          "title": "Validate service pricing and calculations",
+          "status": "done",
+          "description": "Verify that the hourly rates are correctly set for each service (Modelling, Support Removal, Painting, Cleaning) and that the cost calculations update properly when services are toggled or hours are changed."
+        },
+        {
+          "id": 7.3,
+          "title": "Test integration with parent components",
+          "status": "done",
+          "description": "Ensure the OptionalServicesPanel properly communicates selected services and costs to parent components through the onServicesChange callback."
+        },
+        {
+          "id": 7.4,
+          "title": "Perform cross-browser testing",
+          "status": "done",
+          "description": "Test the OptionalServicesPanel component across different browsers to ensure consistent appearance and functionality."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Implement ETA Calculation with Geolocation",
+      "description": "Create functionality to calculate estimated delivery time based on user location and print time.",
+      "status": "done",
+      "dependencies": [
+        6
+      ],
+      "priority": "medium",
+      "details": "1. Implement browser Geolocation API integration to get user coordinates\n2. Calculate distance from user to Brisbane printing center (latitude: -27.4698, longitude: 153.0251)\n3. Calculate shipping time based on distance (50 km/day)\n4. Add print time, prep time (1 day), and random production queue delay (0.5-1.5 days)\n5. Display the estimated delivery date\n6. Handle geolocation permission errors gracefully\n7. Provide a detailed delivery timeline breakdown\n8. Implement location permission management\n9. Format dates in Australian format\n10. Add delivery urgency indicators (express/standard/extended)\n11. Apply professional Brisbane 3D Printing styling\n12. Integrate with CostEstimator for real-time ETA updates\n\nCode example:\n```typescript\nfunction calculateDistance(\n  lat1: number,\n  lon1: number,\n  lat2: number,\n  lon2: number\n): number {\n  // Haversine formula to calculate distance between two points on Earth\n  const R = 6371; // Earth's radius in km\n  const dLat = (lat2 - lat1) * Math.PI / 180;\n  const dLon = (lon2 - lon1) * Math.PI / 180;\n  const a = \n    Math.sin(dLat/2) * Math.sin(dLat/2) +\n    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * \n    Math.sin(dLon/2) * Math.sin(dLon/2);\n  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));\n  return R * c; // Distance in km\n}\n\nfunction calculateETA(printTimeHours: number): Promise<Date> {\n  return new Promise((resolve, reject) => {\n    // Brisbane printing center coordinates\n    const printCenterLat = -27.4698;\n    const printCenterLon = 153.0251;\n    \n    // Try to get user's location\n    navigator.geolocation.getCurrentPosition(\n      (position) => {\n        const userLat = position.coords.latitude;\n        const userLon = position.coords.longitude;\n        \n        // Calculate distance\n        const distanceKm = calculateDistance(userLat, userLon, printCenterLat, printCenterLon);\n        \n        // Calculate shipping time (50 km/day)\n        const shippingDays = distanceKm / 50;\n        \n        // Convert print time from hours to days\n        const printDays = printTimeHours / 24;\n        \n        // Add prep time (1 day)\n        const prepDays = 1;\n        \n        // Add random production queue delay (0.5-1.5 days)\n        const queueDelay = 0.5 + Math.random();\n        \n        // Calculate total days\n        const totalDays = printDays + prepDays + queueDelay + shippingDays;\n        \n        // Calculate estimated delivery date\n        const today = new Date();\n        const deliveryDate = new Date(today.getTime() + totalDays * 24 * 60 * 60 * 1000);\n        \n        resolve(deliveryDate);\n      },\n      (error) => {\n        // If geolocation fails, use a default estimate\n        console.error('Geolocation error:', error);\n        \n        // Assume 2 days shipping as default\n        const defaultShippingDays = 2;\n        \n        // Convert print time from hours to days\n        const printDays = printTimeHours / 24;\n        \n        // Add prep time and queue delay\n        const prepDays = 1;\n        const queueDelay = 1; // Use average\n        \n        // Calculate total days\n        const totalDays = printDays + prepDays + queueDelay + defaultShippingDays;\n        \n        // Calculate estimated delivery date\n        const today = new Date();\n        const deliveryDate = new Date(today.getTime() + totalDays * 24 * 60 * 60 * 1000);\n        \n        resolve(deliveryDate);\n      }\n    );\n  });\n}\n```",
+      "testStrategy": "1. Test geolocation functionality with browser permissions granted\n2. Test fallback behavior when geolocation is denied\n3. Verify distance calculation with known coordinates\n4. Test ETA calculation with various print times\n5. Verify the random production queue delay is within the specified range\n6. Test the date formatting and display in Australian format\n7. Test on different browsers and devices\n8. Verify delivery timeline breakdown is accurate and comprehensive\n9. Test location permission management functionality\n10. Verify delivery urgency indicators (express/standard/extended) display correctly\n11. Test styling consistency with Brisbane 3D Printing brand guidelines\n12. Verify integration with CostEstimator for real-time ETA updates",
+      "subtasks": [
+        {
+          "id": 8.1,
+          "title": "Implement browser Geolocation API integration",
+          "status": "completed",
+          "description": "Integrated browser Geolocation API to get user coordinates with permission handling"
+        },
+        {
+          "id": 8.2,
+          "title": "Implement Haversine formula for distance calculation",
+          "status": "completed",
+          "description": "Created function to calculate distance between user location and Brisbane printing center"
+        },
+        {
+          "id": 8.3,
+          "title": "Implement shipping time calculation",
+          "status": "completed",
+          "description": "Calculated shipping time based on distance (50km/day)"
+        },
+        {
+          "id": 8.4,
+          "title": "Implement production timeline calculation",
+          "status": "completed",
+          "description": "Added print time, prep time (1 day), and random production queue delay (0.5-1.5 days)"
+        },
+        {
+          "id": 8.5,
+          "title": "Create detailed delivery timeline breakdown",
+          "status": "completed",
+          "description": "Implemented UI component showing breakdown of all delivery timeline components"
+        },
+        {
+          "id": 8.6,
+          "title": "Implement location permission management",
+          "status": "completed",
+          "description": "Added UI for managing location permissions and explaining why location is needed"
+        },
+        {
+          "id": 8.7,
+          "title": "Implement Australian date formatting",
+          "status": "completed",
+          "description": "Formatted all dates in Australian format (DD/MM/YYYY)"
+        },
+        {
+          "id": 8.8,
+          "title": "Add delivery urgency indicators",
+          "status": "completed",
+          "description": "Implemented express/standard/extended delivery indicators based on calculated timeline"
+        },
+        {
+          "id": 8.9,
+          "title": "Apply Brisbane 3D Printing styling",
+          "status": "completed",
+          "description": "Applied professional styling consistent with Brisbane 3D Printing brand"
+        },
+        {
+          "id": 8.1,
+          "title": "Integrate with CostEstimator",
+          "status": "completed",
+          "description": "Connected ETA calculation with CostEstimator for real-time updates"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Create Batch Mode Toggle and Pricing Tiers Component",
+      "description": "Implement a toggle for batch mode printing and display appropriate pricing tiers based on the selection.",
+      "details": "1. Create a BatchModeToggle component with an on/off switch\n2. Display pricing information based on the selected mode:\n   - Batch mode: hourly rates ($7/hr normal, $10/hr exotic)\n   - Regular mode: tiered pricing based on print time\n3. Update cost calculations when the mode is changed\n4. Add explanatory text about the benefits/limitations of each mode\n\nCode example:\n```tsx\nconst BatchModeToggle: React.FC<{\n  isBatch: boolean;\n  onToggle: () => void;\n}> = ({ isBatch, onToggle }) => {\n  return (\n    <div className=\"batch-mode-toggle\">\n      <h3>Printing Mode</h3>\n      <div className=\"toggle-container\">\n        <label className=\"switch\">\n          <input type=\"checkbox\" checked={isBatch} onChange={onToggle} />\n          <span className=\"slider round\"></span>\n        </label>\n        <span className=\"toggle-label\">{isBatch ? 'Batch Mode' : 'Regular Mode'}</span>\n      </div>\n      \n      <div className=\"pricing-info\">\n        {isBatch ? (\n          <div className=\"batch-pricing\">\n            <h4>Batch Mode Pricing</h4>\n            <p>Hourly rates:</p>\n            <ul>\n              <li>Standard materials: $7/hr</li>\n              <li>Exotic materials: $10/hr</li>\n            </ul>\n            <p className=\"info-text\">\n              Batch mode is more economical for larger prints but may take longer to complete\n              as your print will be grouped with others.\n            </p>\n          </div>\n        ) : (\n          <div className=\"regular-pricing\">\n            <h4>Regular Mode Pricing</h4>\n            <p>Based on print time:</p>\n            <ul>\n              <li>Less than 1 hour: $10-$15</li>\n              <li>1-3 hours: $30-$45</li>\n              <li>3-6 hours: $60-$90</li>\n              <li>6-10+ hours: $100-$150</li>\n            </ul>\n            <p className=\"info-text\">\n              Regular mode ensures your print is completed as soon as possible.\n            </p>\n          </div>\n        )}\n      </div>\n    </div>\n  );\n};\n```",
+      "testStrategy": "1. Test toggling between batch and regular modes\n2. Verify the pricing information updates correctly\n3. Test that cost calculations update when the mode is changed\n4. Verify the toggle UI matches the site design\n5. Test on different screen sizes to ensure responsive behavior\n6. Verify the explanatory text is clear and helpful",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        6
+      ],
+      "status": "done",
+      "subtasks": []
+    },
+    {
+      "id": 10,
+      "title": "Integrate Components and Create Main Cost Estimator Page",
+      "description": "Combine all components into a cohesive, responsive single-page application that matches the Brisbane 3D Printing website design.",
+      "status": "done",
+      "dependencies": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "priority": "high",
+      "details": "1. Create the main CostEstimator component that integrates all other components\n2. Implement state management to share data between components\n3. Create a responsive layout that works on mobile, tablet, and desktop\n4. Ensure the design matches the Brisbane 3D Printing website\n5. Add a summary section that displays:\n   - Estimated print time\n   - Material cost\n   - Printing cost\n   - Optional services cost\n   - Total cost\n   - Estimated delivery date\n6. Add loading states and error handling\n7. Implement smooth transitions between steps\n\nImplementation Details:\n- Successfully integrated all components into a cohesive, professional single-page application\n- Created comprehensive EstimateSummary component providing complete project overview:\n  * File details and specifications\n  * Selected material information\n  * Pricing mode (standard/batch)\n- Implemented detailed cost breakdown sections:\n  * 3D printing costs (material and printing)\n  * Optional services costs\n  * Grand total calculation\n- Added print timeline and delivery estimates\n- Applied professional Brisbane 3D Printing styling:\n  * Gradient headers\n  * Call-to-action buttons\n  * Consistent typography and color scheme\n- Ensured responsive design for mobile, tablet, and desktop\n- Implemented smooth state management between all components\n- Added appropriate loading states and error handling\n- Created smooth transitions between application steps\n\nCode example:\n```tsx\nconst CostEstimator: React.FC = () => {\n  // State for file and model\n  const [file, setFile] = useState<File | null>(null);\n  const [modelStats, setModelStats] = useState<ModelStats | null>(null);\n  \n  // State for options\n  const [selectedMaterial, setSelectedMaterial] = useState('pla');\n  const [isBatch, setIsBatch] = useState(false);\n  const [hasSupport, setHasSupport] = useState(false);\n  const [services, setServices] = useState<Service[]>([]);\n  \n  // State for calculations\n  const [printTime, setPrintTime] = useState<number | null>(null);\n  const [costs, setCosts] = useState<{\n    materialCost: number;\n    printingCost: number;\n    servicesCost: number;\n    totalCost: number;\n  } | null>(null);\n  const [eta, setEta] = useState<Date | null>(null);\n  \n  // Handle file upload\n  const handleFileUploaded = async (uploadedFile: File) => {\n    setFile(uploadedFile);\n    \n    try {\n      // Parse the file and calculate stats\n      const stats = await parseSTLFile(uploadedFile);\n      setModelStats(stats);\n      \n      // Calculate print time\n      const time = calculatePrintTime({\n        volume: stats.volume,\n        hasSupport\n      });\n      setPrintTime(time);\n      \n      // Calculate costs\n      const calculatedCosts = calculateCost({\n        volume: stats.volume,\n        materialId: selectedMaterial,\n        isBatch,\n        hasSupport\n      });\n      \n      // Calculate services cost\n      const servicesTotal = services\n        .filter(s => s.selected)\n        .reduce((total, service) => total + (service.hourlyRate * service.hours), 0);\n      \n      setCosts({\n        ...calculatedCosts,\n        servicesCost: servicesTotal,\n        totalCost: calculatedCosts.totalCost + servicesTotal\n      });\n      \n      // Calculate ETA\n      const deliveryDate = await calculateETA(time);\n      setEta(deliveryDate);\n    } catch (error) {\n      console.error('Error processing file:', error);\n      // Handle error\n    }\n  };\n  \n  // Update calculations when options change\n  useEffect(() => {\n    if (!modelStats) return;\n    \n    // Recalculate print time, costs, and ETA when options change\n    // Similar to the calculations in handleFileUploaded\n  }, [selectedMaterial, isBatch, hasSupport, services, modelStats]);\n  \n  return (\n    <div className=\"cost-estimator\">\n      <h1>3D Printing Cost Estimator</h1>\n      \n      <div className=\"estimator-container\">\n        <div className=\"upload-section\">\n          <FileUploader onFileUploaded={handleFileUploaded} />\n        </div>\n        \n        {file && modelStats && (\n          <>\n            <div className=\"model-viewer-section\">\n              <ModelViewer modelUrl={URL.createObjectURL(file)} modelType={file.name.endsWith('.stl') ? 'stl' : '3mf'} />\n            </div>\n            \n            <div className=\"options-section\">\n              <MaterialSelector \n                selectedMaterial={selectedMaterial} \n                onSelectMaterial={setSelectedMaterial} \n              />\n              \n              <BatchModeToggle \n                isBatch={isBatch} \n                onToggle={() => setIsBatch(!isBatch)} \n              />\n              \n              <div className=\"support-toggle\">\n                <label>\n                  <input \n                    type=\"checkbox\" \n                    checked={hasSupport} \n                    onChange={() => setHasSupport(!hasSupport)} \n                  />\n                  Include support material\n                </label>\n              </div>\n              \n              <OptionalServicesPanel onServicesChange={setServices} />\n            </div>\n            \n            <div className=\"summary-section\">\n              <h3>Estimate Summary</h3>\n              \n              {printTime && (\n                <div className=\"print-time\">\n                  <span>Estimated Print Time:</span>\n                  <span>{printTime.toFixed(1)} hours</span>\n                </div>\n              )}\n              \n              {costs && (\n                <div className=\"cost-breakdown\">\n                  <div className=\"cost-item\">\n                    <span>Material Cost:</span>\n                    <span>${costs.materialCost.toFixed(2)}</span>\n                  </div>\n                  <div className=\"cost-item\">\n                    <span>Printing Cost:</span>\n                    <span>${costs.printingCost.toFixed(2)}</span>\n                  </div>\n                  {costs.servicesCost > 0 && (\n                    <div className=\"cost-item\">\n                      <span>Optional Services:</span>\n                      <span>${costs.servicesCost.toFixed(2)}</span>\n                    </div>\n                  )}\n                  <div className=\"cost-item total\">\n                    <span>Total Cost:</span>\n                    <span>${costs.totalCost.toFixed(2)}</span>\n                  </div>\n                </div>\n              )}\n              \n              {eta && (\n                <div className=\"eta\">\n                  <span>Estimated Delivery:</span>\n                  <span>{eta.toLocaleDateString('en-AU', { \n                    weekday: 'long',\n                    year: 'numeric',\n                    month: 'long',\n                    day: 'numeric'\n                  })}</span>\n                </div>\n              )}\n            </div>\n          </>\n        )}\n      </div>\n    </div>\n  );\n};\n```",
+      "testStrategy": "1. Test the complete flow from file upload to cost estimation\n2. Verify all components integrate correctly\n3. Test state management and data flow between components\n4. Verify the responsive layout on different screen sizes\n5. Test with various 3D models of different complexities\n6. Verify all calculations are correct and consistent\n7. Test error handling and edge cases\n8. Verify the design matches the Brisbane 3D Printing website\n9. Conduct user testing to ensure the interface is intuitive\n10. Verify the EstimateSummary component displays all required information correctly\n11. Test the application on different browsers to ensure cross-browser compatibility\n12. Verify smooth transitions between steps work as expected\n13. Test loading states appear appropriately during processing\n14. Verify error handling provides useful feedback to users\n15. Confirm the styling matches Brisbane 3D Printing brand guidelines",
+      "subtasks": [
+        {
+          "id": 10.1,
+          "title": "Main Integration Completed",
+          "description": "Successfully integrated all components into a cohesive, professional single-page application that provides a complete end-to-end cost estimation experience.",
+          "status": "completed"
+        },
+        {
+          "id": 10.2,
+          "title": "EstimateSummary Component Implementation",
+          "description": "Created comprehensive summary component with file details, material information, pricing mode, detailed cost breakdown, and delivery estimates.",
+          "status": "completed"
+        },
+        {
+          "id": 10.3,
+          "title": "Brisbane 3D Printing Styling Applied",
+          "description": "Applied professional styling with gradient headers, call-to-action buttons, and consistent typography/color scheme matching the Brisbane 3D Printing website.",
+          "status": "completed"
+        },
+        {
+          "id": 10.4,
+          "title": "Responsive Design Implementation",
+          "description": "Ensured the application is fully responsive across mobile, tablet, and desktop devices.",
+          "status": "completed"
+        },
+        {
+          "id": 10.5,
+          "title": "State Management and User Experience",
+          "description": "Implemented smooth state management between components, added loading states, error handling, and smooth transitions between steps.",
+          "status": "completed"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+# Task ID: 8
+# Title: Implement ETA Calculation with Geolocation
+# Status: done
+# Dependencies: 6
+# Priority: medium
+# Description: Create functionality to calculate estimated delivery time based on user location and print time.
+# Details:
+1. Implement browser Geolocation API integration to get user coordinates
+2. Calculate distance from user to Brisbane printing center (latitude: -27.4698, longitude: 153.0251)
+3. Calculate shipping time based on distance (50 km/day)
+4. Add print time, prep time (1 day), and random production queue delay (0.5-1.5 days)
+5. Display the estimated delivery date
+6. Handle geolocation permission errors gracefully
+7. Provide a detailed delivery timeline breakdown
+8. Implement location permission management
+9. Format dates in Australian format
+10. Add delivery urgency indicators (express/standard/extended)
+11. Apply professional Brisbane 3D Printing styling
+12. Integrate with CostEstimator for real-time ETA updates
+
+Code example:
+```typescript
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  // Haversine formula to calculate distance between two points on Earth
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // Distance in km
+}
+
+function calculateETA(printTimeHours: number): Promise<Date> {
+  return new Promise((resolve, reject) => {
+    // Brisbane printing center coordinates
+    const printCenterLat = -27.4698;
+    const printCenterLon = 153.0251;
+    
+    // Try to get user's location
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+        
+        // Calculate distance
+        const distanceKm = calculateDistance(userLat, userLon, printCenterLat, printCenterLon);
+        
+        // Calculate shipping time (50 km/day)
+        const shippingDays = distanceKm / 50;
+        
+        // Convert print time from hours to days
+        const printDays = printTimeHours / 24;
+        
+        // Add prep time (1 day)
+        const prepDays = 1;
+        
+        // Add random production queue delay (0.5-1.5 days)
+        const queueDelay = 0.5 + Math.random();
+        
+        // Calculate total days
+        const totalDays = printDays + prepDays + queueDelay + shippingDays;
+        
+        // Calculate estimated delivery date
+        const today = new Date();
+        const deliveryDate = new Date(today.getTime() + totalDays * 24 * 60 * 60 * 1000);
+        
+        resolve(deliveryDate);
+      },
+      (error) => {
+        // If geolocation fails, use a default estimate
+        console.error('Geolocation error:', error);
+        
+        // Assume 2 days shipping as default
+        const defaultShippingDays = 2;
+        
+        // Convert print time from hours to days
+        const printDays = printTimeHours / 24;
+        
+        // Add prep time and queue delay
+        const prepDays = 1;
+        const queueDelay = 1; // Use average
+        
+        // Calculate total days
+        const totalDays = printDays + prepDays + queueDelay + defaultShippingDays;
+        
+        // Calculate estimated delivery date
+        const today = new Date();
+        const deliveryDate = new Date(today.getTime() + totalDays * 24 * 60 * 60 * 1000);
+        
+        resolve(deliveryDate);
+      }
+    );
+  });
+}
+```
+
+# Test Strategy:
+1. Test geolocation functionality with browser permissions granted
+2. Test fallback behavior when geolocation is denied
+3. Verify distance calculation with known coordinates
+4. Test ETA calculation with various print times
+5. Verify the random production queue delay is within the specified range
+6. Test the date formatting and display in Australian format
+7. Test on different browsers and devices
+8. Verify delivery timeline breakdown is accurate and comprehensive
+9. Test location permission management functionality
+10. Verify delivery urgency indicators (express/standard/extended) display correctly
+11. Test styling consistency with Brisbane 3D Printing brand guidelines
+12. Verify integration with CostEstimator for real-time ETA updates
+
+# Subtasks:
+## 8.1. Implement browser Geolocation API integration [completed]
+### Dependencies: None
+### Description: Integrated browser Geolocation API to get user coordinates with permission handling
+### Details:
+
+
+## 8.2. Implement Haversine formula for distance calculation [completed]
+### Dependencies: None
+### Description: Created function to calculate distance between user location and Brisbane printing center
+### Details:
+
+
+## 8.3. Implement shipping time calculation [completed]
+### Dependencies: None
+### Description: Calculated shipping time based on distance (50km/day)
+### Details:
+
+
+## 8.4. Implement production timeline calculation [completed]
+### Dependencies: None
+### Description: Added print time, prep time (1 day), and random production queue delay (0.5-1.5 days)
+### Details:
+
+
+## 8.5. Create detailed delivery timeline breakdown [completed]
+### Dependencies: None
+### Description: Implemented UI component showing breakdown of all delivery timeline components
+### Details:
+
+
+## 8.6. Implement location permission management [completed]
+### Dependencies: None
+### Description: Added UI for managing location permissions and explaining why location is needed
+### Details:
+
+
+## 8.7. Implement Australian date formatting [completed]
+### Dependencies: None
+### Description: Formatted all dates in Australian format (DD/MM/YYYY)
+### Details:
+
+
+## 8.8. Add delivery urgency indicators [completed]
+### Dependencies: None
+### Description: Implemented express/standard/extended delivery indicators based on calculated timeline
+### Details:
+
+
+## 8.9. Apply Brisbane 3D Printing styling [completed]
+### Dependencies: None
+### Description: Applied professional styling consistent with Brisbane 3D Printing brand
+### Details:
+
+
+## 8.1. Integrate with CostEstimator [completed]
+### Dependencies: None
+### Description: Connected ETA calculation with CostEstimator for real-time updates
+### Details:
+
+
