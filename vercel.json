@@ -1,17 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "buildCommand": "npm install rollup@3.29.4 --no-save && npm run build",
-        "outputDirectory": "dist"
-      }
-    }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
+  "buildCommand": "npm install rollup@3.29.4 --no-save && NODE_OPTIONS='--max-old-space-size=4096 --no-experimental-fetch' vite build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm install"
 } 
