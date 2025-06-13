@@ -8,6 +8,14 @@ export default defineConfig({
     rollupOptions: {
       // Disable native modules usage which causes issues on Vercel
       context: 'globalThis',
-    }
+      treeshake: {
+        moduleSideEffects: false
+      },
+      output: {
+        manualChunks: undefined
+      }
+    },
+    target: 'esnext',
+    minify: 'esbuild'
   }
 })
