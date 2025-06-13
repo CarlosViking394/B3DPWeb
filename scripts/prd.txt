@@ -1,0 +1,90 @@
+# Brisbane 3D Printing Cost Estimator - Product Requirements Document
+
+## Project Overview
+I'm building a single-page web app for https://brisbane3dprinting.com.au/print-my-model/. The goal is to let users upload 3D model files (STL or 3MF), preview the object in a 3D viewer, and get a **real-world print cost estimate**.
+
+This replaces the static info currently on the page. It must match the visual style of the main site (soft shadows, clean white background, rounded cards, calm gray/blue/black palette). Responsive layout is important.
+
+---
+
+## 🔧 FUNCTIONAL REQUIREMENTS
+
+### 1. FILE UPLOAD
+- Accept `.stl` and `.3mf` files
+- Display filename, size, and basic dimensions
+
+### 2. 3D PREVIEW
+- Use **Three.js** (or `@react-three/fiber`) to render and allow manipulation (orbit, zoom) of the uploaded model
+- Optional (future): integrate Bamboo Studio viewer or mimic its look
+
+### 3. COST CALCULATION
+- Base material types:
+  - PLA: $25/kg
+  - ABS: $30/kg
+  - PETG: $35/kg
+  - TPU: $45/kg
+- Support "batch mode" and tiered pricing:
+  - If `isBatch` is true, use hourly rate: $7/hr (normal), $10/hr (exotic materials)
+  - If not batch, use:
+    - <1h: $10–$15
+    - 1–3h: $30–$45
+    - 3–6h: $60–$90
+    - 6–10h+: $100–$150
+- Add costs for optional services:
+  - Modelling: $70/hr
+  - Support removal, painting, cleaning: $60/hr each
+  - Support fractional hours (e.g. 1.5h)
+- Estimate **print time** based on:
+  - Volume (calculated from STL file)
+  - Fixed print speed (60 mm/s)
+  - Fixed layer height (0.2mm)
+  - Optionally simulate extra time if support material required (based on overhangs)
+- Enforce **minimum price** of $30
+
+### 4. ETA CALCULATION
+- Get user's coordinates via **browser Geolocation API**
+- Calculate distance from user to printing center:
+  - Brisbane: latitude: -27.4698, longitude: 153.0251
+- Assume:
+  - 50 km/day shipping
+  - Print time converted from hours to days
+  - +1 extra day for prep
+  - +0.5–1.5 random delay for production queue
+
+### 5. DESIGN SYSTEM
+- Match look/feel of brisbane3dprinting.com.au
+  - Use existing font, colors, and button styles
+  - Card-like layout with clean spacing and shadows
+- Show:
+  - Uploaded file info
+  - Material selector (highlight selected)
+  - Optional services with steppers
+  - Estimated print time, ETA, and total cost
+- Make it **responsive**
+
+---
+
+## 🧩 TECH SETUP
+Use modern React + TypeScript. No backend for now.
+
+Use any of:
+- `@react-three/fiber` + `@react-three/drei`
+- `three-mesh-bvh` or `stl-volume` to parse STL and get volume
+- `tailwindcss` or inline styles (but match site's design)
+
+---
+
+## ✅ TODOs
+
+Please:
+1. Set up file upload and STL parsing
+2. Render uploaded file in 3D with camera controls
+3. Add cost calculation logic with helper functions
+4. Add optional service selectors and hours input
+5. Show print time and shipping ETA
+6. Style with responsive, site-matching layout
+7. Keep logic modular and scalable
+
+You may create helper components (`CostEstimator`, `ModelViewer`, `OptionalServicesPanel`, etc.) as needed.
+
+Let me know if you need a starting point or assets. The code can assume I will handle hosting and production config. 

@@ -1,0 +1,130 @@
+# Task ID: 5
+# Title: Implement Material Selection Component
+# Status: done
+# Dependencies: 1
+# Priority: medium
+# Description: Create a component that allows users to select the printing material type, which affects the cost calculation.
+# Details:
+1. Create a MaterialSelector component with options for PLA, ABS, PETG, and TPU
+2. Display the price per kg for each material
+3. Implement visual selection state (highlighting the selected material)
+4. Store the selected material in state and make it available for cost calculations
+5. Include visual property indicators for each material
+6. Integrate weight calculations based on selected material
+7. Add use case recommendations for each material
+8. Implement a MaterialComparison component for side-by-side material comparison
+
+Code example:
+```tsx
+interface Material {
+  id: string;
+  name: string;
+  pricePerKg: number;
+  isExotic: boolean;
+  properties: {
+    strength: number;
+    flexibility: number;
+    temperature: number;
+    durability: number;
+  };
+  useCases: string[];
+  density: number; // for weight calculations
+}
+
+const materials: Material[] = [
+  { 
+    id: 'pla', 
+    name: 'PLA', 
+    pricePerKg: 25, 
+    isExotic: false,
+    properties: {
+      strength: 3,
+      flexibility: 2,
+      temperature: 2,
+      durability: 3
+    },
+    useCases: ['Prototypes', 'Decorative items', 'Low-stress parts'],
+    density: 1.24
+  },
+  // Other materials with similar structure
+];
+
+const MaterialSelector: React.FC<{
+  selectedMaterial: string;
+  onSelectMaterial: (materialId: string) => void;
+  volumeInCm3?: number; // Optional volume for weight calculation
+}> = ({ selectedMaterial, onSelectMaterial, volumeInCm3 }) => {
+  const selectedMaterialData = materials.find(m => m.id === selectedMaterial);
+  const estimatedWeight = volumeInCm3 ? (volumeInCm3 * selectedMaterialData?.density / 1000).toFixed(2) : null;
+  
+  return (
+    <div className="material-selector">
+      <h3>Select Material</h3>
+      <div className="material-options">
+        {materials.map((material) => (
+          <div
+            key={material.id}
+            className={`material-option ${selectedMaterial === material.id ? 'selected' : ''}`}
+            onClick={() => onSelectMaterial(material.id)}
+          >
+            <h4>{material.name}</h4>
+            <p>${material.pricePerKg}/kg</p>
+            <div className="property-indicators">
+              {/* Visual indicators for material properties */}
+            </div>
+            <div className="use-cases">
+              <small>Recommended for: {material.useCases.join(', ')}</small>
+            </div>
+          </div>
+        ))}
+      </div>
+      {estimatedWeight && (
+        <div className="weight-estimate">
+          <p>Estimated weight: {estimatedWeight}kg</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const MaterialComparison: React.FC = () => {
+  return (
+    <div className="material-comparison">
+      <h3>Material Comparison</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th>Strength</th>
+            <th>Flexibility</th>
+            <th>Temperature</th>
+            <th>Durability</th>
+            <th>Price</th>
+            <th>Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          {materials.map(material => (
+            <tr key={material.id}>
+              <td>{material.name}</td>
+              {/* Property and use case cells */}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+```
+
+# Test Strategy:
+1. Verify all material options are displayed correctly with enhanced property indicators
+2. Test selection functionality
+3. Verify the selected material is highlighted correctly
+4. Test that the selected material is correctly passed to parent components
+5. Verify the styling matches the Brisbane 3D Printing website design
+6. Test on different screen sizes to ensure responsive behavior
+7. Verify weight calculations are accurate based on volume and material density
+8. Test the MaterialComparison component displays correct side-by-side comparisons
+9. Verify that use case recommendations are displayed correctly
+10. Test integration with CostEstimator component

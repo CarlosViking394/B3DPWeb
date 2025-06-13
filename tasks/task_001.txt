@@ -1,0 +1,90 @@
+# Task ID: 1
+# Title: Set up React TypeScript Project Structure
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Initialize a React TypeScript project with necessary dependencies for 3D rendering and styling to match the Brisbane 3D Printing website.
+# Details:
+1. Create a new React TypeScript project using Create React App or Vite
+2. Install required dependencies:
+   - three.js
+   - @react-three/fiber
+   - @react-three/drei
+   - tailwindcss (optional)
+3. Set up project structure with components folder:
+   - CostEstimator
+   - ModelViewer
+   - FileUploader
+   - OptionalServicesPanel
+   - ETACalculator
+4. Create basic styling to match brisbane3dprinting.com.au:
+   - Extract color palette (soft shadows, clean white background, rounded cards, calm gray/blue/black)
+   - Set up global CSS variables or Tailwind theme
+5. Create a responsive layout container for the single-page app
+
+# Test Strategy:
+1. Verify all dependencies install correctly
+2. Ensure the project builds without errors
+3. Confirm the basic layout renders correctly on different screen sizes
+4. Check that styling matches the main website's design language
+
+# Subtasks:
+## 1. Initialize React TypeScript Project [done]
+### Dependencies: None
+### Description: Set up a new React TypeScript project using either Create React App or Vite, with proper configuration for TypeScript.
+### Details:
+1. Choose between Create React App or Vite (Vite recommended for faster development)
+2. Run initialization command: `npm create vite@latest my-app --template react-ts` or `npx create-react-app my-app --template typescript`
+3. Navigate to project directory and install base dependencies
+4. Verify TypeScript configuration in tsconfig.json
+5. Test the development server to ensure it runs correctly
+
+## 2. Install 3D Rendering and Styling Dependencies [done]
+### Dependencies: 1.1
+### Description: Install and configure all required dependencies for 3D rendering capabilities and styling to match the Brisbane 3D Printing website.
+### Details:
+1. Install three.js: `npm install three @types/three`
+2. Install React Three Fiber: `npm install @react-three/fiber`
+3. Install React Three Drei: `npm install @react-three/drei`
+4. Install TailwindCSS: `npm install -D tailwindcss postcss autoprefixer`
+5. Initialize Tailwind: `npx tailwindcss init -p`
+6. Configure Tailwind by updating tailwind.config.js with content paths
+7. Add Tailwind directives to main CSS file
+
+## 3. Set Up Project Structure and Component Scaffolding [done]
+### Dependencies: 1.2
+### Description: Create the folder structure and scaffold the required components with TypeScript interfaces.
+### Details:
+1. Create a components folder in the src directory
+2. Create subfolders for each component: CostEstimator, ModelViewer, FileUploader, OptionalServicesPanel, ETACalculator
+3. Create TypeScript interface files for each component's props
+4. Create basic component files with TypeScript typing
+5. Set up index files for easy imports
+6. Create a shared types folder for common interfaces
+7. Set up a basic routing structure if needed
+
+## 4. Implement Brisbane 3D Printing Styling [done]
+### Dependencies: 1.2
+### Description: Extract and implement the color palette and styling from brisbane3dprinting.com.au to create a consistent look and feel.
+### Details:
+1. Visit brisbane3dprinting.com.au and use browser developer tools to extract the color palette
+2. Create CSS variables or Tailwind theme configuration with the extracted colors
+3. Implement styling for soft shadows, clean white backgrounds, and rounded cards
+4. Set up responsive breakpoints matching the website
+5. Create reusable styled components for buttons, cards, and form elements
+6. Implement typography styles matching the website
+7. Create a global styles file for consistent application-wide styling
+
+## 5. Create Responsive Layout Container [done]
+### Dependencies: 1.3, 1.4
+### Description: Develop a responsive layout container for the single-page application that adapts to different screen sizes.
+### Details:
+1. Create a main Layout component with proper TypeScript typing
+2. Implement responsive container with appropriate max-width and padding
+3. Set up CSS Grid or Flexbox layout system for component arrangement
+4. Create responsive navigation/header area
+5. Implement media queries or Tailwind responsive classes for different screen sizes
+6. Test layout on mobile, tablet, and desktop viewports
+7. Ensure all components render properly within the layout container
+8. Implement any necessary animations or transitions for UI elements
+

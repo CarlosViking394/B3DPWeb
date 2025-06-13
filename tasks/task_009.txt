@@ -1,0 +1,73 @@
+# Task ID: 9
+# Title: Create Batch Mode Toggle and Pricing Tiers Component
+# Status: done
+# Dependencies: 1, 6
+# Priority: medium
+# Description: Implement a toggle for batch mode printing and display appropriate pricing tiers based on the selection.
+# Details:
+1. Create a BatchModeToggle component with an on/off switch
+2. Display pricing information based on the selected mode:
+   - Batch mode: hourly rates ($7/hr normal, $10/hr exotic)
+   - Regular mode: tiered pricing based on print time
+3. Update cost calculations when the mode is changed
+4. Add explanatory text about the benefits/limitations of each mode
+
+Code example:
+```tsx
+const BatchModeToggle: React.FC<{
+  isBatch: boolean;
+  onToggle: () => void;
+}> = ({ isBatch, onToggle }) => {
+  return (
+    <div className="batch-mode-toggle">
+      <h3>Printing Mode</h3>
+      <div className="toggle-container">
+        <label className="switch">
+          <input type="checkbox" checked={isBatch} onChange={onToggle} />
+          <span className="slider round"></span>
+        </label>
+        <span className="toggle-label">{isBatch ? 'Batch Mode' : 'Regular Mode'}</span>
+      </div>
+      
+      <div className="pricing-info">
+        {isBatch ? (
+          <div className="batch-pricing">
+            <h4>Batch Mode Pricing</h4>
+            <p>Hourly rates:</p>
+            <ul>
+              <li>Standard materials: $7/hr</li>
+              <li>Exotic materials: $10/hr</li>
+            </ul>
+            <p className="info-text">
+              Batch mode is more economical for larger prints but may take longer to complete
+              as your print will be grouped with others.
+            </p>
+          </div>
+        ) : (
+          <div className="regular-pricing">
+            <h4>Regular Mode Pricing</h4>
+            <p>Based on print time:</p>
+            <ul>
+              <li>Less than 1 hour: $10-$15</li>
+              <li>1-3 hours: $30-$45</li>
+              <li>3-6 hours: $60-$90</li>
+              <li>6-10+ hours: $100-$150</li>
+            </ul>
+            <p className="info-text">
+              Regular mode ensures your print is completed as soon as possible.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+```
+
+# Test Strategy:
+1. Test toggling between batch and regular modes
+2. Verify the pricing information updates correctly
+3. Test that cost calculations update when the mode is changed
+4. Verify the toggle UI matches the site design
+5. Test on different screen sizes to ensure responsive behavior
+6. Verify the explanatory text is clear and helpful

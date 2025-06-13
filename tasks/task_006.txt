@@ -1,0 +1,161 @@
+# Task ID: 6
+# Title: Develop Print Time and Cost Calculation Logic
+# Status: done
+# Dependencies: 3, 5
+# Priority: high
+# Description: Create utility functions to calculate print time and cost based on model volume, material type, and printing parameters.
+# Details:
+1. Implement a function to calculate print time based on:
+   - Model volume
+   - Fixed print speed (60 mm/s)
+   - Fixed layer height (0.2mm)
+   - Optional support material estimation
+2. Implement cost calculation based on:
+   - Material type and cost per kg
+   - Batch mode pricing vs. tiered pricing
+   - Minimum price enforcement ($30)
+3. Create helper functions for tiered pricing based on print time
+
+Code example:
+```typescript
+interface CostCalculationParams {
+  volume: number; // in cubic mm
+  materialId: string;
+  isBatch: boolean;
+  hasSupport: boolean;
+}
+
+function calculatePrintTime(params: {
+  volume: number;
+  hasSupport: boolean;
+}): number {
+  const { volume, hasSupport } = params;
+  
+  // Basic print time calculation based on volume
+  // This is a simplified model - real calculation would be more complex
+  const printSpeed = 60; // mm/s
+  const layerHeight = 0.2; // mm
+  
+  // Estimate the amount of material to be extruded
+  const materialLength = volume / (Math.PI * (1.75/2) ** 2); // For 1.75mm filament
+  
+  // Estimate print time in hours
+  let printTimeHours = materialLength / (printSpeed * 60 * 60);
+  
+  // Add extra time for support if needed
+  if (hasSupport) {
+    printTimeHours *= 1.3; // 30% extra time for support
+  }
+  
+  return printTimeHours;
+}
+
+function calculateCost(params: CostCalculationParams): {
+  materialCost: number;
+  printingCost: number;
+  totalCost: number;
+} {
+  const { volume, materialId, isBatch, hasSupport } = params;
+  
+  // Get material details
+  const material = materials.find(m => m.id === materialId)!;
+  
+  // Calculate material weight in kg
+  const density = 1.24; // g/cm³ (average for PLA, would vary by material)
+  const weightKg = (volume / 1000) * density / 1000;
+  
+  // Calculate material cost
+  const materialCost = weightKg * material.pricePerKg;
+  
+  // Calculate print time
+  const printTimeHours = calculatePrintTime({ volume, hasSupport });
+  
+  // Calculate printing cost
+  let printingCost = 0;
+  
+  if (isBatch) {
+    // Batch mode pricing
+    const hourlyRate = material.isExotic ? 10 : 7;
+    printingCost = printTimeHours * hourlyRate;
+  } else {
+    // Tiered pricing
+    if (printTimeHours < 1) {
+      printingCost = 10 + (printTimeHours * 5); // $10-$15
+    } else if (printTimeHours < 3) {
+      printingCost = 30 + ((printTimeHours - 1) * 7.5); // $30-$45
+    } else if (printTimeHours < 6) {
+      printingCost = 60 + ((printTimeHours - 3) * 10); // $60-$90
+    } else {
+      printingCost = 100 + ((printTimeHours - 6) * 10); // $100-$150+
+    }
+  }
+  
+  // Calculate total cost
+  let totalCost = materialCost + printingCost;
+  
+  // Enforce minimum price
+  totalCost = Math.max(totalCost, 30);
+  
+  return {
+    materialCost,
+    printingCost,
+    totalCost
+  };
+}
+```
+
+# Test Strategy:
+1. Test print time calculation with various model volumes
+2. Test cost calculation with different materials
+3. Verify batch mode vs. tiered pricing calculations
+4. Test minimum price enforcement
+5. Test with and without support material
+6. Create unit tests with known inputs and expected outputs
+7. Verify calculations match the requirements in the PRD
+
+# Subtasks:
+## 1. Refine Volume-Based Print Time Calculation [done]
+### Dependencies: None
+### Description: Enhance the print time calculation function to account for more accurate volume-to-time conversion factors and printing parameters.
+### Details:
+Improve the calculatePrintTime function by: 1) Researching and implementing more accurate conversion factors between volume and print time, 2) Adding parameters for variable print speeds (not just fixed 60mm/s), 3) Supporting different layer heights (not just 0.2mm), 4) Implementing a more sophisticated support material estimation algorithm based on model geometry, 5) Adding time estimates for non-printing movements.
+<info added on 2025-05-31T04:45:20.540Z>
+PRINT TIME CALCULATION IMPLEMENTED - Created comprehensive costCalculator.ts with volume-based print time calculation, material density constants, infill percentage accounting, support material estimation, and tiered/batch pricing logic. Includes formatPrintTime and formatCost utilities. All calculations follow Brisbane 3D Printing requirements with 60mm/s speed, 0.2mm layers, and proper time estimations.
+</info added on 2025-05-31T04:45:20.540Z>
+
+## 2. Implement Material-Specific Cost Calculations [done]
+### Dependencies: 6.1
+### Description: Develop a comprehensive material cost calculation system that accounts for different material types, densities, and pricing structures.
+### Details:
+Create a materials database with properties including: density, cost per kg, and special handling requirements. Implement functions to accurately convert volume to weight based on material-specific densities. Add support for specialty materials with different pricing structures. Include wastage factors in calculations (typically 5-10% depending on model complexity).
+<info added on 2025-05-31T04:47:28.951Z>
+MATERIAL-SPECIFIC COST CALCULATIONS IMPLEMENTED - Enhanced CostEstimator component with comprehensive cost calculator integration, real-time cost calculations, print settings controls (support material, infill, layer height, print speed), detailed cost breakdown display, and interactive batch/tiered pricing modes. All calculations update dynamically based on material properties and model volume.
+</info added on 2025-05-31T04:47:28.951Z>
+
+## 3. Develop Tiered Pricing Logic [done]
+### Dependencies: 6.1, 6.2
+### Description: Create a flexible tiered pricing system based on print time, material type, and quantity.
+### Details:
+Implement a configurable tiered pricing structure that can be easily modified. Create helper functions for determining appropriate pricing tier based on print time. Add logic for exotic material pricing premiums. Implement quantity discount calculations for multiple identical prints. Design the system to allow easy updates to pricing tiers without code changes.
+<info added on 2025-05-31T04:47:53.929Z>
+TIERED PRICING LOGIC IMPLEMENTED - Created comprehensive tiered pricing system with 4 tiers (-15 for 0-1h, -45 for 1-3h, -90 for 3-6h, + for 6h+) in costCalculator.ts. Includes calculateTieredPricing function with proper tier identification and cost breakdown display in CostEstimator component.
+</info added on 2025-05-31T04:47:53.929Z>
+
+## 4. Implement Batch Processing Cost Optimization [done]
+### Dependencies: 6.3
+### Description: Create logic for optimizing costs when processing multiple prints as a batch.
+### Details:
+Develop algorithms to calculate cost savings for batch processing. Implement logic to determine when batch processing is more cost-effective than individual prints. Create functions to calculate optimal batch sizes based on print parameters. Add support for mixed-material batch calculations. Implement batch-specific minimum price enforcement rules.
+<info added on 2025-05-31T04:48:20.638Z>
+BATCH PROCESSING COST OPTIMIZATION IMPLEMENTED - Created calculateBatchPricing function with hourly rates ($X/hour standard, $Y/hour exotic materials) in costCalculator.ts. Batch mode toggle integrated in CostEstimator with real-time pricing updates and clear UI indicators for batch vs tiered pricing modes.
+</info added on 2025-05-31T04:48:20.638Z>
+
+## 5. Create User-Facing Cost Summary Interface [done]
+### Dependencies: 6.2, 6.3, 6.4
+### Description: Develop functions that generate detailed, user-friendly cost breakdowns for display in the UI.
+### Details:
+Create a function that returns a detailed cost breakdown including: material costs, printing time costs, setup fees, and total cost. Implement formatting helpers for currency and time display. Add comparison logic to show savings (batch vs. individual, different materials). Create functions to generate cost estimates at different quality settings. Ensure all calculations enforce the minimum price threshold of $30.
+<info added on 2025-05-31T04:48:39.625Z>
+USER-FACING COST SUMMARY INTERFACE IMPLEMENTED - Enhanced CostEstimator component provides comprehensive cost summary with real-time print time display, detailed cost breakdown (material, printing, support costs), interactive print settings controls, batch/tiered pricing indicators, pricing tips, and minimum cost enforcement. All with professional Brisbane 3D Printing styling and responsive design.
+</info added on 2025-05-31T04:48:39.625Z>
+

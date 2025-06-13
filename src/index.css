@@ -1,0 +1,258 @@
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Brisbane 3D Printing Cost Estimator - Matching brisbane3dprinting.com.au */
+@import "tailwindcss";
+
+/* Brisbane 3D Printing Brand Colors - Matching actual website */
+@theme {
+  --color-brisbane-primary: #1a73e8;    /* Primary blue from website */
+  --color-brisbane-secondary: #0f5bb8;  /* Darker blue accent */
+  --color-brisbane-accent: #ff6b35;     /* Orange accent color */
+  --color-brisbane-dark: #1a1a1a;       /* Dark text */
+  --color-brisbane-gray: #6b7280;       /* Gray text */
+  --color-brisbane-light: #f8fafc;      /* Light background */
+  --color-brisbane-white: #ffffff;      /* Pure white */
+  --color-brisbane-success: #10b981;    /* Success green */
+  
+  --gradient-brisbane-primary: linear-gradient(135deg, #1a73e8 0%, #0f5bb8 100%);
+  --gradient-brisbane-accent: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%);
+  
+  --shadow-brisbane: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-brisbane-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  --shadow-brisbane-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  
+  --font-family-brisbane: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  --font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+/* Global styles matching Brisbane 3D Printing */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-brisbane);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  color: var(--color-brisbane-dark);
+  background: var(--color-brisbane-white);
+  font-weight: 400;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Brisbane 3D Printing Brand Utilities */
+.text-brisbane-primary { color: var(--color-brisbane-primary); }
+.text-brisbane-secondary { color: var(--color-brisbane-secondary); }
+.text-brisbane-accent { color: var(--color-brisbane-accent); }
+.text-brisbane-dark { color: var(--color-brisbane-dark); }
+.text-brisbane-gray { color: var(--color-brisbane-gray); }
+.text-brisbane-white { color: var(--color-brisbane-white); }
+
+.bg-brisbane-primary { background-color: var(--color-brisbane-primary); }
+.bg-brisbane-secondary { background-color: var(--color-brisbane-secondary); }
+.bg-brisbane-accent { background-color: var(--color-brisbane-accent); }
+.bg-brisbane-light { background-color: var(--color-brisbane-light); }
+.bg-brisbane-white { background-color: var(--color-brisbane-white); }
+
+.bg-gradient-brisbane { background: var(--gradient-brisbane-primary); }
+.bg-gradient-accent { background: var(--gradient-brisbane-accent); }
+
+.border-brisbane-primary { border-color: var(--color-brisbane-primary); }
+.border-brisbane-secondary { border-color: var(--color-brisbane-secondary); }
+.border-brisbane-accent { border-color: var(--color-brisbane-accent); }
+
+.shadow-brisbane { box-shadow: var(--shadow-brisbane); }
+.shadow-brisbane-lg { box-shadow: var(--shadow-brisbane-lg); }
+.shadow-brisbane-soft { box-shadow: var(--shadow-brisbane-soft); }
+
+.font-brisbane { font-family: var(--font-family-brisbane); }
+.font-heading { font-family: var(--font-family-heading); }
+
+/* Professional Button Styles - Matching Brisbane 3D Printing */
+.btn-brisbane-primary {
+  background: var(--gradient-brisbane-primary);
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-brisbane-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-brisbane-lg);
+}
+
+.btn-brisbane-secondary {
+  background: white;
+  color: var(--color-brisbane-primary);
+  border: 2px solid var(--color-brisbane-primary);
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-brisbane-secondary:hover {
+  background: var(--color-brisbane-primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-brisbane-accent {
+  background: var(--gradient-brisbane-accent);
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-brisbane-accent:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-brisbane-lg);
+}
+
+/* Professional Input Styles */
+input, select, textarea {
+  font-family: var(--font-family-brisbane);
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  background: white;
+  color: var(--color-brisbane-dark);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-brisbane-primary);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+  outline: none;
+}
+
+/* Card Styles - Matching Brisbane 3D Printing */
+.card-brisbane {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-brisbane);
+  padding: 2rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-brisbane:hover {
+  box-shadow: var(--shadow-brisbane-lg);
+  transform: translateY(-2px);
+}
+
+/* Header Gradient - Matching Brisbane 3D Printing */
+.header-brisbane {
+  background: var(--gradient-brisbane-primary);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+/* Focus styles */
+*:focus {
+  outline: 2px solid var(--color-brisbane-primary);
+  outline-offset: 2px;
+}
+
+/* Typography - Matching Brisbane 3D Printing */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-brisbane-dark);
+}
+
+.heading-gradient {
+  background: var(--gradient-brisbane-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Material Badge Styles */
+.material-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.material-badge.standard {
+  background: rgba(26, 115, 232, 0.1);
+  color: var(--color-brisbane-primary);
+}
+
+.material-badge.exotic {
+  background: rgba(255, 107, 53, 0.1);
+  color: var(--color-brisbane-accent);
+}
+
+/* Animation utilities */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive spacing */
+.container-brisbane {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-brisbane {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-brisbane {
+    padding: 0 4rem;
+  }
+} 
